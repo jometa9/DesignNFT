@@ -6,8 +6,11 @@ import { useTheme } from "../context/ThemeContext";
 import axios from "axios";
 import Image from "next/image";
 import { Sun, Moon } from "lucide-react";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import dynamic from "next/dynamic";
+import WagmiWalletButton from "./WagmiWalletButton";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useConnect } from "wagmi";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 // Dynamically load WalletMultiButton to ensure it is only rendered on the client side
 const DynamicWalletMultiButton = dynamic(
@@ -21,6 +24,9 @@ const DynamicWalletMultiButton = dynamic(
 const NavBar = () => {
   const { theme, toggleTheme } = useTheme();
   const [username, setUsername] = useState<string | null>(null);
+  const { connected } = useWallet();
+  const { status } = useConnect();
+  const { wagmiConnected, solanaConnected } = useAuthContext();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -83,7 +89,8 @@ const NavBar = () => {
               <Sun className="w-5 h-5 text-white" />
             )}
           </button>
-          <DynamicWalletMultiButton />
+          {!wagmiConnected ? <DynamicWalletMultiButton /> : null}
+          {!solanaConnected ? <WagmiWalletButton /> : null}
         </div>
       </div>
       <div className="container mx-auto flex justify-between items-center sm:hidden mt-2">

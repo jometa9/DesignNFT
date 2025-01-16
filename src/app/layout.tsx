@@ -21,7 +21,7 @@ const fontSerif = FontSerif({
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning className={fontSerif.variable}>
+    <html lang="en" suppressHydrationWarning >
       <body className={cn("min-h-screen bg-background font-serif antialiased")}>
         <Providers>
           <ThemeProvider>
